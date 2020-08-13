@@ -215,8 +215,7 @@ hr:before,
 #article-container h4:before,
 #article-container h5:before,
 #article-container h6:before,
-#article-container .post-outdate-notice:before,
-.note:not(.no-icon)::before {
+#article-container .post-outdate-notice:before {
   display: inline-block;
   font-weight: 600;
   font-style: normal;
@@ -5285,7 +5284,7 @@ blockquote.pullquote.right {
 .note h4,
 .note h5,
 .note h6 {
-  margin-top: 3px;
+  margin-top: 0;
   margin-bottom: 0;
   padding-top: 0 !important;
   border-bottom: initial;
@@ -5311,15 +5310,6 @@ blockquote.pullquote.right {
 .note code {
   background: rgba(27,31,35,0.05) !important;
 }
-.note:not(.no-icon) {
-  padding-left: 45px;
-}
-.note:not(.no-icon)::before {
-  position: absolute;
-  top: 13px;
-  left: 15px;
-  font-size: larger;
-}
 .note.default {
   background: #f7f7f7;
   border-left-color: #777;
@@ -5329,10 +5319,6 @@ blockquote.pullquote.right {
 .note.default h4,
 .note.default h5,
 .note.default h6 {
-  color: #777;
-}
-.note.default:not(.no-icon)::before {
-  content: '\f0a9';
   color: #777;
 }
 .note.primary {
@@ -5346,10 +5332,6 @@ blockquote.pullquote.right {
 .note.primary h6 {
   color: #6f42c1;
 }
-.note.primary:not(.no-icon)::before {
-  content: '\f055';
-  color: #6f42c1;
-}
 .note.info {
   background: #eef7fa;
   border-left-color: #428bca;
@@ -5359,10 +5341,6 @@ blockquote.pullquote.right {
 .note.info h4,
 .note.info h5,
 .note.info h6 {
-  color: #428bca;
-}
-.note.info:not(.no-icon)::before {
-  content: '\f05a';
   color: #428bca;
 }
 .note.success {
@@ -5376,10 +5354,6 @@ blockquote.pullquote.right {
 .note.success h6 {
   color: #5cb85c;
 }
-.note.success:not(.no-icon)::before {
-  content: '\f058';
-  color: #5cb85c;
-}
 .note.warning {
   background: #fdf8ea;
   border-left-color: #f0ad4e;
@@ -5391,10 +5365,6 @@ blockquote.pullquote.right {
 .note.warning h6 {
   color: #f0ad4e;
 }
-.note.warning:not(.no-icon)::before {
-  content: '\f06a';
-  color: #f0ad4e;
-}
 .note.danger {
   background: #fcf1f2;
   border-left-color: #d9534f;
@@ -5404,10 +5374,6 @@ blockquote.pullquote.right {
 .note.danger h4,
 .note.danger h5,
 .note.danger h6 {
-  color: #d9534f;
-}
-.note.danger:not(.no-icon)::before {
-  content: '\f056';
   color: #d9534f;
 }
 #article-container .tabs {
