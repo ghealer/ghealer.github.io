@@ -1,4 +1,2 @@
-https://ghealer.github.io/
-https://ghealer.top/
-路边的野花的安全小站
+https://ghealer.top/ | 安全小站 | 使用 Hexo 搭建
 
